@@ -1,6 +1,6 @@
 # String Calculator - TDD Test
 
-_This should take you no more than 30 minutes. When you've finished create a pull request (PR) to develop branch to submit your code for review. Do not make any PR to Master branch._
+_This should take you no more than 30 minutes. When you've finished create a pull request (PR) to tests branch to submit your code for review. Do not make any PR to Master branch._
 
 Make sure you only test for **correct inputs**. there is no need to test for invalid inputs for this kata
 
