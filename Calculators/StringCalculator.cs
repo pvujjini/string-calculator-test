@@ -10,7 +10,7 @@ namespace Calculators
     public class StringCalculator
     {
         private static readonly Regex SingleDelimiterRegex = new Regex("^\\/\\/\\D(\\r\\n?|\\n).*");
-        private static readonly Regex MultipleCharacterDelimiterRegex = new Regex("^\\/\\/\\[([^0-9\\[\\]]+)\\](\\r\\n?|\\n).*");
+        private static readonly Regex MultipleCharacterDelimiterRegex = new Regex("^\\/\\/(\\[([^0-9\\[\\]]+)\\])+(\\r\\n?|\\n).*");
 
         /// <summary>
         /// Adds a integers contained in a delimited string
@@ -24,12 +24,14 @@ namespace Calculators
         /// and/or the delimiters. E.g. "0,1,2"
         /// </para>
         /// <para>
-        /// A multi-character delimiter are specified at the begining of the string using the format
-        /// "//[delimiter]\n[numbers…]". For example "//[***]\n1***2***3", which will return the result 6.
+        /// Delimiters are specified at the begining of the string using the format
+        /// "//[delimiter1][delimiter2]\n[numbers…]".<br/>
+        /// Example 1: "//[***]\n1***2***3", which will return the result 6.<br/>
+        /// Example 2: "//[*][$]\n1*2$3$4*5", which will return the result 15.<br/>
         /// Digits and square brackets ('[' and ']') are not allowed as part of the delimiter.
         /// </para>
         /// <para>
-        /// The square brackets are optional if a single character delimiter is specified.
+        /// The square brackets are optional if one single character delimiter is specified.
         /// For example "//;\n1;2", which will return the result 3. In this instance '[' and ']' are allowed 
         /// as delimiters, but digits are still not allowed.
         /// </para>
@@ -55,9 +57,9 @@ namespace Calculators
                 var match = MultipleCharacterDelimiterRegex.Match(numbers);
                 if (match.Success)
                 {
-                    var capture = match.Groups[1].Captures[0];
-                    delimiters = new[] { capture.Value };
-                    cleanedNumbers = numbers.Substring(capture.Length + 5);
+                    var captures = match.Groups[2].Captures.Cast<Capture>().ToList();
+                    delimiters = captures.Select(c => c.Value).ToArray();
+                    cleanedNumbers = numbers.Substring(captures.Sum(c => c.Length + 2) + 3);
                 }
                 else
                 {
