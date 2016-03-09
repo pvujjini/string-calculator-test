@@ -55,5 +55,18 @@ namespace Calculators.Test
             // } 
             // Assert.AreEqual((int.MaxValue / 2) + 1, calc.Add(builder.ToString()));
         }
+
+        [TestCase]
+        public void AllowNewlineAsSeparator()
+        {
+            var calc = new StringCalculator();
+            Assert.AreEqual(0, calc.Add("0\n0,0"));
+            Assert.AreEqual(0, calc.Add("0,0\n0,0,0\n0,0"));
+            Assert.AreEqual(0, calc.Add(string.Join("\n", Enumerable.Range(1, 100000).Select(i => "0"))));
+            Assert.AreEqual(0, calc.Add(string.Join("\n", Enumerable.Range(1, 100000).Select(i => "0,0"))));
+            Assert.AreEqual(200000, calc.Add(string.Join("\n", Enumerable.Range(1, 100000).Select(i => "1,1"))));
+            Assert.AreEqual(((1000 * 1000) + 1000) / 2,
+                calc.Add(string.Join("\n", Enumerable.Range(1, 500).Select(i => $"{(i * 2) - 1},{i * 2}"))));
+        }
     }
 }

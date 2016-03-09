@@ -16,12 +16,12 @@ namespace Calculators
         /// <remarks>
         /// <para>
         /// The string can contain zero to any number of integers, but they must be
-        /// delimited by commas with no spaces. E.g. "0,1,2"
+        /// delimited by commas or newline characters, or a mix, with no spaces. E.g. "0,1,2\n3\n4"
         /// </para>
         /// </remarks>
         public int Add(string numbers)
         {
-            return numbers.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Sum();
+            return numbers.Split(new[] {',', '\n'}, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Sum();
         }
     }
 }
