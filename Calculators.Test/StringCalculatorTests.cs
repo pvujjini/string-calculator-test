@@ -127,5 +127,17 @@ namespace Calculators.Test
             Assert.AreEqual(((1000 * 1000) + 1000) / 2,
                 calc.Add($"//[s][p][q][r]\n{string.Join("", Enumerable.Range(1, 1000).Select(i => $"{"spqr"[i % 4]}{i}")).Substring(1)}"));
         }
+
+        [TestCase]
+        public void AllowMultipleMultipleCharacterDelimiters()
+        {
+            var calc = new StringCalculator();
+            Assert.AreEqual(0, calc.Add("//[ % ][**%]\n0 % 0**%0"));
+            Assert.AreEqual(0, calc.Add("//[abc][defg]\n0abc0abc0abc0defg0defg0abc0"));
+            Assert.AreEqual(0, calc.Add($"//[\t$][%&]\n{string.Join("\t$", Enumerable.Range(1, 100000).Select(i => "0"))}"));
+            Assert.AreEqual(100000, calc.Add($"//[<>'][@r][\"]\n{string.Join("\"", Enumerable.Range(1, 100000).Select(i => "1"))}"));
+            Assert.AreEqual(((1000 * 1000) + 1000) / 2,
+                calc.Add($"//[spqr][rip][viz]\n{string.Join("", Enumerable.Range(1, 1000).Select(i => $"{(new [] {"spqr", "rip", "viz"})[i % 3]}{i}")).Substring(3)}"));
+        }
     }
 }
