@@ -68,5 +68,18 @@ namespace Calculators.Test
             Assert.AreEqual(((1000 * 1000) + 1000) / 2,
                 calc.Add(string.Join("\n", Enumerable.Range(1, 500).Select(i => $"{(i * 2) - 1},{i * 2}"))));
         }
+
+        [TestCase]
+        public void AllowSingleCharacterDelimiters()
+        {
+            var calc = new StringCalculator();
+            Assert.AreEqual(0, calc.Add("// \n0 0"));
+            Assert.AreEqual(0, calc.Add("//;\n0;0;0"));
+            Assert.AreEqual(0, calc.Add("//a\n0a0a0a0a0a0a0"));
+            Assert.AreEqual(0, calc.Add($"//\t\n{string.Join("\t", Enumerable.Range(1, 100000).Select(i => "0"))}"));
+            Assert.AreEqual(100000, calc.Add($"//[\n{string.Join("[", Enumerable.Range(1, 100000).Select(i => "1"))}"));
+            Assert.AreEqual(((1000 * 1000) + 1000) / 2,
+                calc.Add($"//]\n{string.Join("]", Enumerable.Range(1, 1000).Select(i => i.ToString()))}"));
+        }
     }
 }
