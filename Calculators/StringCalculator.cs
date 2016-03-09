@@ -28,6 +28,9 @@ namespace Calculators
         /// If no delimiters are specified then commas and newline characters, or a mix, will be expected.
         /// E.g. "0,1,2\n3\n4"
         /// </para>
+        /// <para>
+        /// Integers over 1000 in the input are ignored and not included in the sum.
+        /// </para>
         /// </remarks>
         public int Add(string numbers)
         {
@@ -51,7 +54,7 @@ namespace Calculators
             {
                 throw new Exception($"negatives not allowed: ({string.Join(", ", negatives)})");
             }
-            return ints.Sum();
+            return ints.Where(i => i <= 1000).Sum();
 
         }
     }

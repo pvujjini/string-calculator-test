@@ -93,5 +93,14 @@ namespace Calculators.Test
                 $"negatives not allowed: {string.Join(", ", Enumerable.Range(1, 100000).Select(i => $"-{i}"))}");
         }
 
+        [TestCase]
+        public void IgnoreNumbersGreaterThanOneThousand()
+        {
+            var calc = new StringCalculator();
+            Assert.AreEqual(0, calc.Add("// \n1001"));
+            Assert.AreEqual(1001, calc.Add($"//;\n1;1000;{int.MaxValue}"));
+            Assert.AreEqual(10, calc.Add("//a\n1a1001a2a234565a3a6543a4"));
+            Assert.AreEqual(0, calc.Add($"//\t\n{string.Join("\t", Enumerable.Range(1, 100000).Select(i => $"{i + 2064}"))}"));
+        }
     }
 }
