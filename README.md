@@ -22,3 +22,8 @@ Make sure you only test for **correct inputs**. there is no need to test for inv
 7. Delimiters can be of any length with the following format:  `“//[delimiter]\n” for example: “//[***]\n1***2***3”` should return 6
 8. Allow multiple delimiters like this:  `“//[delim1][delim2]\n” for example “//[*][%]\n1*2%3”` should return 6.
 9. Make sure you can also handle multiple delimiters with length longer than one char
+
+## Implementation
+
+I created the solution in Visual Studio 2015 with ReSharper. I used the NUnit 3 Test Runner extension
+for Visual Studio and the NUnit nuget package to write the tests.
