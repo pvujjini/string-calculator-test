@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Calculators.Test
@@ -81,5 +82,16 @@ namespace Calculators.Test
             Assert.AreEqual(((1000 * 1000) + 1000) / 2,
                 calc.Add($"//]\n{string.Join("]", Enumerable.Range(1, 1000).Select(i => i.ToString()))}"));
         }
+
+        [TestCase]
+        public void ThrowsOnNegatives()
+        {
+            var calc = new StringCalculator();
+            Assert.Throws<Exception>(() => calc.Add("-1"), "negatives not allowed: (-1)");
+            Assert.Throws<Exception>(() => calc.Add("//;\n-1;1000;-408"), "negatives not allowed: (-1, -408)");
+            Assert.Throws<Exception>(() => calc.Add("//[\n" + string.Join("[", Enumerable.Range(1, 100000).Select(i => $"-{i}"))),
+                $"negatives not allowed: {string.Join(", ", Enumerable.Range(1, 100000).Select(i => $"-{i}"))}");
+        }
+
     }
 }

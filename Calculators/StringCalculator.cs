@@ -16,14 +16,15 @@ namespace Calculators
         /// </summary>
         /// <param name="numbers">The delimited string containing the integers</param>
         /// <returns>The sum of the integers</returns>
+        /// <exception cref="Exception">When any of the supplied integers are less than zero</exception>
         /// <remarks>
         /// <para>
         /// The string can contain zero to any number of integers. With no whitespace between the integers
         /// and/or the delimiters. E.g. "0,1,2"
         /// </para>
         /// <para>,
-        /// The delimiter is specified at the beginning of the string using the format "//[delimiter]\n[numbers…]".
-        /// For example "//;\n1;2", which will return the result 3.
+        /// A single character delimiter is specified at the beginning of the string using the format
+        /// "//[delimiter]\n[numbers…]". For example "//;\n1;2", which will return the result 3.
         /// If no delimiters are specified then commas and newline characters, or a mix, will be expected.
         /// E.g. "0,1,2\n3\n4"
         /// </para>
@@ -42,9 +43,16 @@ namespace Calculators
                 delimiters = new[] { ',', '\n' };
                 cleanedNumbers = numbers;
             }
-            return cleanedNumbers.Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
+            var ints = cleanedNumbers.Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
-                .Sum();
+                .ToList();
+            var negatives = ints.Where(i => i < 0).ToList();
+            if (negatives.Count > 0)
+            {
+                throw new Exception($"negatives not allowed: ({string.Join(", ", negatives)})");
+            }
+            return ints.Sum();
+
         }
     }
 }
